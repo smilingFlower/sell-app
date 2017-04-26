@@ -1,5 +1,5 @@
 <template>
-	<div>
+	<div class="goods">
 		我是商品
 	</div>
 </template>
@@ -10,6 +10,6 @@
 	};
 </script>
 
-<style lang="stylus" rel="stylesheet/stylus">
+<style lang="scss" rel="stylesheet/scss" scoped>
 </style>
 

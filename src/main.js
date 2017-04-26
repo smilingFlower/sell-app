@@ -18,8 +18,11 @@ const routes = [
 ];
 
 const router = new VueRouter({
+  linkActiveClass: 'active',
   routes // （缩写）相当于 routes: routes
 });
+
+router.push('/goods');
 
 /* eslint-disable no-new */
 // new Vue({

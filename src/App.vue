@@ -27,16 +27,32 @@
   };
 </script>
 
-<style lang="stylus" rel="stylesheet/stylus">
-  #app
-    .tab
-      display flex
-      height 40px
-      line-height 40px
-      font-size 14px
-      color rgb(77,85,93)
-      .tab-item
-        flex 1
-        text-align center
+<style lang="scss" rel="stylesheet/scss" scoped>
+@import 'common/sass/mixin.scss';
+
+ #app{
+  .tab{
+      display: flex;
+      height: 40px;
+      line-height: 40px;
+      @include border-1px(rgba(7,17,27,0.1));
+
+      .tab-item{
+        flex: 1;
+        text-align: center;
+
+        & > a{
+          display:block;
+          font-size: 14px;
+          color:rgb(77,85,93);
+        }
+
+        & > a.active{
+          color:rgb(240,20,20);
+        }
+
+      }
+    }
+ }
 </style>
 
