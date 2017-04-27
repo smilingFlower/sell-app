@@ -26,5 +26,7 @@ module.exports = {
     //语句结尾需要分号
     'semi': ['error', 'always'],
     'indent': 0,
+    'space-before-function-paren': 0,
+    'keyword-spacing': 0
   }
 }

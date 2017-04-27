@@ -1,12 +1,17 @@
 <template>
 	<div class="header">
-		我是header
+    {{seller.name}}
 	</div>
 </template>
 
-<script type="text/ecmascript-6">
+<script>
 	export default {
-	  name: 'header'
+    name: 'header',
+    props: {
+      seller: {
+        type: Object
+      }
+    }
 	};
 </script>
 

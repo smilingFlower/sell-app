@@ -1,15 +1,15 @@
-<template>
+ 自行车，。、<template>
   <div id="app">
-    <v-header></v-header>
-    <div class="tab">
+    <v-header :seller="seller"></v-header>
+    <div class="tab border-1px">
       <div class="tab-item">
-        <router-link to="/goods">商品</router-link>
+        <router-link :to="'/goods'">商品</router-link>
       </div>
       <div class="tab-item">
-        <router-link to="/ratings">评论</router-link>
+        <router-link :to="'/ratings'">评论</router-link>
       </div>
       <div class="tab-item">
-        <router-link to="/seller">商家</router-link>
+        <router-link :to="'/seller'">商家</router-link>
       </div>
     </div>
     <router-view></router-view>
@@ -18,9 +18,29 @@
 
 <script>
   import header from './components/header/header.vue';
+  import VueAxios from 'axios';
+
+  const ERR_OK = 0;
 
   export default {
     name: 'app',
+    data() {
+      return {
+        seller: {}
+      };
+    },
+    created() {
+      var _this = this;
+      VueAxios.get('/api/seller')
+        .then(function (response) {
+          if(response.data.erron === ERR_OK) {
+            _this.seller = response.data.data;
+          }
+        })
+        .catch(function (error) {
+          console.log(error);
+      });
+    },
     components: {
       'v-header': header
     }
@@ -42,13 +62,13 @@
         text-align: center;
 
         & > a{
-          display:block;
+          display: block;
           font-size: 14px;
-          color:rgb(77,85,93);
+          color: rgb(77,85,93);
         }
 
         & > a.active{
-          color:rgb(240,20,20);
+          color: rgb(240,20,20);
         }
 
       }

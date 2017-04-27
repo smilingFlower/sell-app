@@ -1,10 +1,10 @@
 <template>
 	<div>
-		我是商家
+		我是seller
 	</div>
 </template>
 
-<script type="text/ecmascript-6">
+<script>
 	export default {
 	  name: 'seller'
 	};

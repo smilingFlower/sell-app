@@ -7,6 +7,8 @@ import goods from './components/goods/goods';
 import ratings from './components/ratings/ratings';
 import seller from './components/seller/seller';
 
+import './common/sass/index.scss';
+
 Vue.config.productionTip = false;
 
 Vue.use(VueRouter);
@@ -19,15 +21,12 @@ const routes = [
 
 const router = new VueRouter({
   linkActiveClass: 'active',
-  routes // （缩写）相当于 routes: routes
+  routes
 });
 
-router.push('/goods');
+router.push({path: '/goods'});
 
 /* eslint-disable no-new */
-// new Vue({
-//   router
-// }).$mount('#app');
 new Vue({
   el: '#app',
   router,
