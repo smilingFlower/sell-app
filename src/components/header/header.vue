@@ -30,22 +30,46 @@
     <div class="background">
       <img :src="seller.avatar" width="100%" height="100%">
     </div>
-    <div v-show="detailShow" class="detail">
-      <div class="detail-wrapper clearfix">
-        <div class="detail-main">
-          <h1 class="name">{{seller.name}}</h1>
-          <div class="star-wrapper">
-            <star :starSize="48" :starScore ="seller.score"></star>
+    <transition name="fade" tag="div">
+      <div v-if="detailShow" class="detail">
+          <div class="detail-wrapper clearfix">
+            <div class="detail-main">
+              <!-- 商家名字 -->
+              <h1 class="name">{{seller.name}}</h1>
+              <!-- 评分 星星 -->
+              <div class="star-wrapper">
+                <star :starSize="48" :starScore ="seller.score"></star>
+              </div>
+              <!-- 小标题 优惠信息-->
+              <div class="title">
+                <div class="line"></div>
+                <div class="text">优惠信息</div>
+                <div class="line"></div>
+              </div>
+              <!-- 优惠列表 -->
+              <div v-if="seller.supports" class="supports">
+                <li v-for="item in seller.supports">
+                  <span class="icon" :class="classMap[item.type]"></span>
+                  <span class="information">{{item.description}}</span>
+                </li>
+              </div> 
+              <!-- 小标题 商家公告-->
+              <div class="title">
+                <div class="line"></div>
+                <div class="text">商家公告</div>
+                <div class="line"></div>
+              </div>
+              <!-- 商家公告-->
+              <div class="bulletin-text">
+                {{seller.bulletin}}
+              </div>                 
+            </div>
           </div>
-          <div class="title">
-            
+          <div class="detail-close" @click="showDetail">
+            <i class="icon-close"></i>
           </div>
-        </div>
-      </div>
-      <div class="detail-close">
-        <i class="icon-close"></i>
-      </div>
-    </div>
+      </div> <!-- detailShow end-->
+    </transition>
 	</div>
 </template>
 
@@ -209,7 +233,16 @@
       width: 100%;
       height: 100%;
       overflow: auto;
-      background-color:rgba(7,17,27,0.8);
+      backdrop-filter: blur(10px);
+      opacity: 1;
+      background-color: rgba(7,17,27,0.8);
+      transition: all 1s;
+      &.fade-enter-active, &.fade-leave-active {
+      }
+      &.fade-enter, &.fade-leave-active {
+        opacity: 0;
+        background-color: rgba(7,17,27,0);
+      }
       .detail-wrapper{
         width: 100%;
         min-height: 100%;
@@ -227,7 +260,71 @@
             text-align: center;
           }
           .title{
+            display: flex;
+            width: 80%;
+            margin: 28px auto 24px auto;
+            .line{
+              flex: 1;
+              position: relative;
+              top: -14px;
+              border-bottom: 1px solid rgba(255,255,255,0.2);
+            }
+            .text{
+              padding-left: 12px;
+              padding-right: 12px;
+              font-size: 14px;
+              font-weight: 700;
+              line-height: 28px;
+              color: #fff;
+            }
           }
+          .supports{
+            width: 80%;
+            margin: 0 auto;
+            li{
+              margin-bottom: 12px;
+              &:last-child{
+                margin-bottom: 0;
+              }
+              .icon {
+                display: inline-block;
+                vertical-align: top;
+                width: 16px;
+                height: 16px;
+                background-size: 16px 16px;
+                background-repeat: no-repeat;
+                &.decrease{
+                  @include bg-image('decrease_1',"png");
+                }
+                &.discount{
+                  @include bg-image('discount_1',"png");
+                }
+                &.guarantee{
+                  @include bg-image('guarantee_1',"png");
+                }
+                &.invoice{
+                  @include bg-image('invoice_1',"png");
+                }
+                &.special{
+                  @include bg-image('special_1',"png");          
+                }
+              }
+              .information{
+                font-size: 12px;
+                vertical-align: center;
+              }       
+            }
+          }
+          .bulletin-text{
+            box-sizing: border-box;
+            width: 80%;
+            margin: 0 auto;
+            padding-right: 12px;
+            padding-left: 12px;
+            font-weight: 200;
+            line-height: 24px;
+            font-size: 12px;
+          }        
         }
       }
       .detail-close{

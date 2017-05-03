@@ -1,12 +1,19 @@
 <template>
 	<div class="goods">
-		我是商品
-	</div>
+   <div class=""></div> 
+  </div>
 </template>
 
 <script>
 	export default {
-	  name: 'goods'
+	  name: 'goods',
+    props: {
+      seller: {
+        type: Object
+      }
+    },
+    created() {
+    }
 	};
 </script>
 
