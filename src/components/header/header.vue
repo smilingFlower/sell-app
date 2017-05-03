@@ -34,6 +34,12 @@
       <div class="detail-wrapper clearfix">
         <div class="detail-main">
           <h1 class="name">{{seller.name}}</h1>
+          <div class="star-wrapper">
+            <star :starSize="48" :starScore ="seller.score"></star>
+          </div>
+          <div class="title">
+            
+          </div>
         </div>
       </div>
       <div class="detail-close">
@@ -44,7 +50,9 @@
 </template>
 
 <script>
-	export default {
+  import star from '../star/star.vue';
+
+  export default {
     name: 'header',
     data() {
       return {
@@ -64,8 +72,11 @@
       showDetail() {
         this.detailShow = !this.detailShow;
       }
+    },
+    components: {
+      star
     }
-	};
+  };
 </script>
 
 <style lang="scss" rel="stylesheet/scss" scoped>
@@ -210,6 +221,12 @@
             text-align: center;
             font-size:16px;
             font-weight: 700px;
+          }
+          .star-wrapper{
+            margin-top: 16px;
+            text-align: center;
+          }
+          .title{
           }
         }
       }
