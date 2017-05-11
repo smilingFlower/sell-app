@@ -1,13 +1,13 @@
 <template>
 	<div class="goods">
-   <div class="menu-wrapper" ref="menuWrapper">
+    <div class="menu-wrapper" ref="menuWrapper">
      <ul>
        <li v-for="(item, index) in goods" class="menu-item border-1px" :class="{'current':currentIndex === index}" @click="selectMenu(index,$event)">
          <span v-show="item.type > -1" class="icon" :class="classMap[item.type]"></span><span class="name">{{item.name}}</span>
        </li>
      </ul>
-   </div> 
-   <div class="goods-wrapper"  ref="foodsWrapper">
+    </div> 
+    <div class="goods-wrapper"  ref="foodsWrapper">
      <ul>
        <li v-for="item in goods" class="food-list" ref="foodList">
          <h2 class="title">{{item.name}}</h2>
@@ -26,18 +26,25 @@
                  <span class="now-price">￥{{food.price}}</span>
                  <span class="old-price" v-if="food.oldPrice">￥{{food.oldPrice}}</span>
                </div>
+               <div class="cartcontrol-warpper">
+                 <cartcontrol @add="addFood" :food='food'></cartcontrol>
+               </div>
              </div>
            </li>
          </ul>
        </li>
      </ul>
-   </div> 
+    </div> 
+    <shopcart ref="shopcart" :selectFoods="selectFoods" :minPrice="seller.minPrice" :deliveryPrice="seller.deliveryPrice"></shopcart>
   </div>
 </template>
 
 <script>
   import VueAxios from 'axios';
   import BScroll from 'better-scroll';
+  import shopcart from '../shopcart/shopcart';
+  import cartcontrol from '../cartcontrol/cartcontrol';
+  import food from '../food/food';
 
   const ERR_OK = 0;
 
@@ -54,8 +61,13 @@
         classMap: [],
         listHeight: [],
         scrollY: 0,
-        menuScrollY: 0
+        selectedFood: {}
       };
+    },
+    components: {
+      shopcart,
+      cartcontrol,
+      food
     },
     computed: {
       currentIndex() {
@@ -67,12 +79,23 @@
           }
         }
         return 0;
+      },
+      selectFoods() {
+        let foods = [];
+        this.goods.forEach((value) => {
+          value.foods.forEach((food) => {
+            if (food.count) {
+              foods.push(food);
+            }
+          });
+        });
+        return foods;
       }
     },
     created() {
+      var _this = this;
       this.classMap = ['decrease', 'discount', 'special', 'invoice', 'guarantee'];
 
-      var _this = this;
       VueAxios.get('/api/goods')
         .then(function(response) {
           if(response.data.erron === ERR_OK) {
@@ -96,7 +119,8 @@
         });
 
         this.foodsScroll = new BScroll(this.$refs.foodsWrapper, {
-          probeType: 3
+          probeType: 3,
+          click: true
         });
 
         this.foodsScroll.on('scroll', (pos) => {
@@ -121,6 +145,21 @@
         let foodList = this.$refs.foodList;
         let el = foodList[index];
         this.foodsScroll.scrollToElement(el, 300);
+      },
+      selectFood(food, event) {
+        if (!event._constructed) {
+          return;
+        }
+        this.selectedFood = food;
+        this.$refs.food.show();
+      },
+      addFood(target) {
+        this._dorp(target);
+      },
+      _dorp(target) {
+        this.$nextTick(() => {
+          this.$refs.shopcart.drop(target);
+        });
       }
     }
   };
@@ -204,6 +243,7 @@
             height: 58px;
           }
           .infomation{
+            position: relative;
             flex: 1;
             padding-left: 10px;
             .name{
@@ -237,6 +277,11 @@
                 vertical-align: top;
                 text-decoration: line-through;
               }
+            }
+            .cartcontrol-warpper{
+              position: absolute;
+              right: 0;
+              bottom: -6px;
             }
           }
         }
