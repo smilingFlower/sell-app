@@ -1,4 +1,5 @@
 <template>
+  <div>
 		<div class="shopcart">
       <div class="content" @click="toggleList">
         <div class="content-left">
@@ -21,7 +22,7 @@
           <!-- 价格 -->
         </div>
         <div class="content-right">
-          <div class="pay" :class="{'enough':totalAmount >= minPrice}">
+          <div class="pay" @click.stop="pay" :class="{'enough':totalAmount >= minPrice}">
             {{payDecs}}
           </div>
         </div>
@@ -36,28 +37,33 @@
           </div>
       </div>
       <div class="shopcart-list" v-show="listShow">
-        <div class="list-header">
+        <div class="list-header border-1px">
           <h1 class="title">购物车</h1>
-          <span class="empty">清空</span>
+          <span class="empty" @click="empty">清空</span>
         </div>
-        <div class="list-content">
+        <div class="list-content" ref="listContent">
           <ul>
-            <li class="food" v-for="food in selectFoods">
+            <li class="food border-1px" v-for="food in selectFoods">
               <span class="name">{{food.name}}</span>
               <div class="price">
                 <span>￥{{food.price * food.count}}</span>
               </div>
               <div class="cartcontrol-wrapper">
-                <cartcontrol :food="food"></cartcontrol>
+                <cartcontrol  @add="addFood" :food="food"></cartcontrol>
               </div>
             </li>
           </ul>
         </div>
       </div>
     </div>
+    <transition name="fade">
+      <div class="list-mask" @click="hideList" v-show="listShow"></div>
+    </transition>
+  </div>
 </template>
 
 <script>
+  import BScroll from 'better-scroll';
   import cartcontrol from '../cartcontrol/cartcontrol';
 
   export default {
@@ -135,11 +141,23 @@
         }
       },
       listShow() {
+        console.log(this.totalAmount);
         if (!this.totalAmount) {
           this.fold = true;
           return false;
         }
         let show = !this.fold;
+        if (show) {
+          this.$nextTick(() => {
+            if (!this.scroll) {
+              this.scroll = new BScroll(this.$refs.listContent, {
+                click: true
+              });
+            }else{
+              this.scroll.refresh();
+            }
+          });
+        }
         return show;
       }
     },
@@ -202,12 +220,31 @@
           return;
         }
         this.fold = !this.fold;
+      },
+      empty() {
+        this.selectFoods.forEach((food) => {
+          food.count = 0;
+        });
+      },
+      addFood(target) {
+        this.drop(target);
+      },
+      pay() {
+        if (this.totalAmount < this.minPrice) {
+          return;
+        }
+        window.alert(`支付${this.totalAmount}元`);
+      },
+      hideList() {
+        this.fold = true;
       }
     }
   };
 </script>
 
 <style lang="scss" rel="stylesheet/scss" scoped>
+  @import "../../common/sass/mixin.scss";
+
   .shopcart{
     position: fixed;
     left: 0;
@@ -316,6 +353,83 @@
           transition: all 0.4s linear;
         }
       }
+    }
+    .shopcart-list{
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      z-index: -1;
+      width: 100%;
+      background-color: #fff;
+      .list-header{
+        height: 40px;
+        padding: 0 18px;
+        background-color: #f3f5f7;
+        line-height: 40px;
+        @include border-1px(rgba(7,17,27,0.1));
+        .title{
+          float: left;
+          font-size: 14px;
+          color: rgb(7,17,27);
+        }
+        .empty{
+          float: right;
+          font-size: 12px;
+          color: rgb(0,160,220);
+        }
+      }
+      .list-content{
+        box-sizing:border-box;
+        max-height: 220px;
+        padding:0 18px;
+        overflow: hidden;
+        background: #fff;
+        ul{
+          padding-bottom: 48px;
+        }
+        .food{
+          position: relative;
+          padding: 12px 0;
+          box-sizing: border-box;
+          @include border-1px(rgba(7,17,27,0.1));
+          .name{
+            line-height: 24px;
+            font-size: 14px;
+            color: rgb(7, 17, 27);
+          }
+          .price{
+            position: absolute;
+            right: 90px;
+            bottom: 12px;
+            line-height: 24px;
+            font-size: 14px;
+            font-weight: 700;
+            color: rgb(240, 20, 20);
+          }
+          .cartcontrol-wrapper{
+            position: absolute;
+            right: 0;
+            bottom: 6px;
+          }
+        }
+      }
+    }
+  }
+  .list-mask{
+    position: fixed;
+    top: 0;
+    left: 0;
+    height: 100%;
+    width: 100%;
+    z-index: 40;
+    backdrop-filter: blur(10px);
+    background-color: rgba(7,17,27,0.6);
+    &.fade-enter-active,&.fade-leave-active{
+      opacity: 1;
+      transition: all 0.5s;
+    }
+    &.fade-enter,&.fade-leave-active{
+      opacity: 0;
     }
   }
 </style>

@@ -49,20 +49,21 @@
 <style lang="scss" rel="stylesheet/scss" scoped>
   .cartcontrol{
     font-size:0;
+    height: 24px;
     .cart-decrease{
       display: inline-block;
+      font-size: 0;
       transform: translate3d(0, 0, 0);
-      padding:6px 0 6px 4px;
       .inner{
         display: inline-block;
         line-height: 24px;
         font-size: 24px;
         color: #00a0dc;
-        transition: all 0.5s linear;
+        transition: all 0.6s linear;
         transform: rotate(0);      
       }
       &.move-enter-active, &.move-leave-active{
-        transition: all 0.5s linear;
+        transition: all 0.6s linear;
         opacity: 1;
       }
       &.move-enter, &.move-leave-active{
@@ -80,14 +81,13 @@
       text-align: center;
       color: rgb(147,153,159);
       vertical-align: top;
-      padding: 6px 4px;
+      padding-right: 2px;
+      padding-left: 2px;
     }
     .cart-add{
       display: inline-block;
-      font-size: 20px;
+      font-size: 24px;
       color: #00a0dc;
-      line-height: 24px;
-      padding:6px 4px 6px 0;
     }
   }
 </style>
