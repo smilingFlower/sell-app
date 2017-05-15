@@ -408,8 +408,8 @@
           }
           .cartcontrol-wrapper{
             position: absolute;
-            right: 0;
-            bottom: 6px;
+            top: 12px;
+            right: 12px;
           }
         }
       }

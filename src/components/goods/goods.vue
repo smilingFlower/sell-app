@@ -36,7 +36,7 @@
      </ul>
     </div> 
     <shopcart ref="shopcart" :selectFoods="selectFoods" :minPrice="seller.minPrice" :deliveryPrice="seller.deliveryPrice"></shopcart>
-    <food></food>
+    <food ref="food" :food="selectedFood"></food>
   </div>
 </template>
 
@@ -282,7 +282,7 @@
             .cartcontrol-warpper{
               position: absolute;
               right: 0;
-              bottom: -6px;
+              bottom: 0;
             }
           }
         }
