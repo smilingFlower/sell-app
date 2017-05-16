@@ -141,7 +141,6 @@
         }
       },
       listShow() {
-        console.log(this.totalAmount);
         if (!this.totalAmount) {
           this.fold = true;
           return false;

@@ -35,6 +35,23 @@
           <ratingselect :ratings="food.ratings" @toggle="toggleContent" @select="selectRating" :selectType="selectType" :onlyContent="onlyContent" :desc="desc
           " ></ratingselect>
        </div>
+       <div class="rating-list">
+         <ul v-show="food.ratings && food.ratings.length">
+           <li v-show="needShow(rating.rateType,rating.text)" v-for="rating in food.ratings" class="rating-item border-1px">
+             <div class="user">
+               <span class="name">{{rating.username}}</span>
+               <img class="avatar" :src="rating.avatar" width="12" height="12">
+             </div>
+             <div class="time">{{rating.rateTime | formatData}}</div>
+             <p class="info">
+               <span :class="{'icon-thumb_down':rating.rateType === 1,'icon-thumb_up':rating.rateType === 0}"></span>{{rating.text}}
+             </p>
+           </li>
+         </ul>
+         <div v-show="!food.ratings || !food.ratings.length || showRating" class="no-rating">
+           暂无评价
+         </div>
+       </div>
       </div>
     </div>
   </transition>
@@ -43,12 +60,11 @@
 <script>
   import Vue from 'vue';
   import BScroll from 'better-scroll';
+  import {formatData} from '../../common/js/data';
   import cartcontrol from '../cartcontrol/cartcontrol';
   import split from '../split/split';
   import ratingselect from '../ratingselect/ratingselect';
 
-  // const POSITIVE = 0;
-  // const NEGATIVE = 1;
   const ALL = 2;
 
   export default {
@@ -62,7 +78,8 @@
           all: '全部',
           positive: '推荐',
           negative: '吐嘈'
-        }
+        },
+        showRating: false  // 是否有评论
       };
     },
     props: {
@@ -96,17 +113,42 @@
 
         Vue.set(this.food, 'count', 1);
       },
-      selectRating(type) {
-        this.selectType = type;
+      selectRating(arg) {
+        this.selectType = arg.type;
+
+        if (this.selectType === arg.type && arg.count === 0) {
+          this.showRating = true;
+        }else{
+          this.showRating = false;
+        }
+
         this.$nextTick(() => {
           this.scroll.refresh();
         });
       },
       toggleContent() {
         this.onlyContent = !this.onlyContent;
+
         this.$nextTick(() => {
           this.scroll.refresh();
         });
+      },
+      needShow(type, text) {
+        if (this.onlyContent === true && text === '') {
+          return false;
+        }
+
+        if (this.selectType === ALL) {
+          return true;
+        }else{
+          return type === this.selectType;
+        }
+      }
+    },
+    filters: {
+      formatData(time) {
+        let date = new Date(time);
+        return formatData(date, 'yyyy-MM-dd hh:mm');
       }
     },
     components: {
@@ -118,6 +160,8 @@
 </script>
 
 <style lang="scss" rel="stylesheet/scss" scoped>
+  @import "../../common/sass/mixin";
+
   .food{
     position: fixed;
     top: 0;
@@ -235,12 +279,64 @@
         }
       }
       .rating{
+        padding-top: 18px;
         .title{
           font-size: 14px;
           font-weight: 700;
           color: rgb(7,27,37);
           line-height: 14px;
           padding-left: 18px;
+        }
+      }
+      .rating-list{
+        padding: 0 18px;
+        .rating-item{
+          position: relative;
+          padding: 18px 0;
+          @include border-1px(rgba(7,17,27,0.1));
+          .time{
+            font-size: 10px;
+            line-height: 10px;
+            color:rgb(147,153,159);
+          }
+          .info{
+            font-size: 12px;
+            color: rgb(7,17,27);
+            padding-top: 10px;
+            .icon-thumb_down,.icon-thumb_up{
+              display: inline-block;
+              vertical-align: top;
+              font-size: 12px;
+              margin-right: 4px;
+            }
+            .icon-thumb_down{
+              color:rgb(147,153,159);
+            }
+            .icon-thumb_up{
+              color:rgb(0,160,220);
+            }
+          }
+          .user{
+            position: absolute;
+            right: 0;
+            top: 18px;
+            .name{
+              display:inline-block;
+              vertical-align: top;
+              color:rgb(147,153,159);
+              font-size: 12px;
+            }
+            .avatar{
+              display:inline-block;
+              vertical-align: top;
+              border-radius: 50%;
+            }
+          }
+        }
+        .no-rating{
+          padding: 20px 0;
+          font-size: 12px;
+          color: #999;
         }
       }
     }
