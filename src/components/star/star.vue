@@ -58,7 +58,7 @@
         width: 12px;
         height: 12px;
         background-size: 12px 12px;
-        margin-right: 10px;
+        margin-right: 6px;
         &:last-child{
           margin-right: 0;
         }        
@@ -78,7 +78,7 @@
         width: 18px;
         height: 18px;
         background-size: 18px 18px;
-        margin-right: 16px;
+        margin-right: 8px;
         &:last-child{
           margin-right: 0;
         }        
@@ -98,7 +98,7 @@
         width: 24px;
         height: 24px;
         background-size: 24px 24px;
-        margin-right: 20px;
+        margin-right: 10px;
         &:last-child{
           margin-right: 0;
         }        

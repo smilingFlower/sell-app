@@ -14,17 +14,16 @@ Vue.config.productionTip = false;
 Vue.use(VueRouter);
 
 const routes = [
- { path: '/goods', component: goods },
- { path: '/ratings', component: ratings },
- { path: '/seller', component: seller }
+  {path: '/', redirect: '/goods'},
+  { path: '/goods', component: goods },
+  { path: '/ratings', component: ratings },
+  { path: '/seller', component: seller }
 ];
 
 const router = new VueRouter({
   linkActiveClass: 'active',
   routes
 });
-
-router.push({path: '/goods'});
 
 /* eslint-disable no-new */
 new Vue({

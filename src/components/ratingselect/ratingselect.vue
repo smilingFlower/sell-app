@@ -59,8 +59,6 @@
     },
     methods: {
       select(type, count, event) {
-        console.log(type);
-        console.log(typeof type);
         if (!event._constructed) {
           return;
         }

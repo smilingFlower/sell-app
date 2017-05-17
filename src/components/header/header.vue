@@ -74,7 +74,7 @@
 </template>
 
 <script>
-  import star from '../star/star.vue';
+  import star from '../star/star';
 
   export default {
     name: 'header',
