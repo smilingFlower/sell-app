@@ -167,7 +167,7 @@
 </script>
 
 <style lang="scss" rel="stylesheet/scss" scoped>
-  @import "../../common/sass/mixin.scss";
+  @import "../../common/sass/mixin";
  
   .goods{
     display: flex;

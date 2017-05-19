@@ -12,13 +12,16 @@
         <router-link :to="'/seller'">商家</router-link>
       </div>
     </div>
-    <router-view :seller="seller"></router-view>
+    <keep-alive>
+      <router-view :seller="seller"></router-view>
+    </keep-alive>
   </div>
 </template>
 
 <script>
-  import header from './components/header/header.vue';
+  import header from './components/header/header';
   import VueAxios from 'axios';
+  import {urlParse} from './common/js/util';
 
   const ERR_OK = 0;
 
@@ -26,15 +29,20 @@
     name: 'app',
     data() {
       return {
-        seller: {}
+        seller: {
+          id: (() => {
+            let queryParam = urlParse();
+            return queryParam.id;
+          })()
+        }
       };
     },
     created() {
       var _this = this;
-      VueAxios.get('/api/seller')
+      VueAxios.get('/api/seller?id' + this.seller.id)
         .then(function (response) {
           if(response.data.erron === ERR_OK) {
-            _this.seller = response.data.data;
+            _this.seller = Object.assign({}, _this.seller, response.data.data);
           }
         })
         .catch(function (error) {

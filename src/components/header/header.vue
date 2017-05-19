@@ -47,11 +47,8 @@
                 <div class="line"></div>
               </div>
               <!-- 优惠列表 -->
-              <div v-if="seller.supports" class="supports">
-                <li v-for="item in seller.supports">
-                  <span class="icon" :class="classMap[item.type]"></span>
-                  <span class="information">{{item.description}}</span>
-                </li>
+              <div v-if="seller.supports" class="supports-list">
+                <supports :supports="seller.supports" :imgType="2"></supports>
               </div> 
               <!-- 小标题 商家公告-->
               <div class="title">
@@ -75,6 +72,7 @@
 
 <script>
   import star from '../star/star';
+  import supports from '../supports/supports';
 
   export default {
     name: 'header',
@@ -98,7 +96,8 @@
       }
     },
     components: {
-      star
+      star,
+      supports
     }
   };
 </script>
@@ -278,42 +277,9 @@
               color: #fff;
             }
           }
-          .supports{
+          .supports-list{
             width: 80%;
             margin: 0 auto;
-            li{
-              margin-bottom: 12px;
-              &:last-child{
-                margin-bottom: 0;
-              }
-              .icon {
-                display: inline-block;
-                vertical-align: top;
-                width: 16px;
-                height: 16px;
-                background-size: 16px 16px;
-                background-repeat: no-repeat;
-                &.decrease{
-                  @include bg-image('decrease_1',"png");
-                }
-                &.discount{
-                  @include bg-image('discount_1',"png");
-                }
-                &.guarantee{
-                  @include bg-image('guarantee_1',"png");
-                }
-                &.invoice{
-                  @include bg-image('invoice_1',"png");
-                }
-                &.special{
-                  @include bg-image('special_1',"png");          
-                }
-              }
-              .information{
-                font-size: 12px;
-                vertical-align: center;
-              }       
-            }
           }
           .bulletin-text{
             box-sizing: border-box;
