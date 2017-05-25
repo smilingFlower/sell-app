@@ -32,6 +32,7 @@
 
 <style lang="scss" rel="stylesheet/scss" scoped>
   @import "../../common/sass/mixin";
+  $supports-list: decrease, discount, special, invoice, guarantee;
 
   .supports{
     .item{
@@ -46,40 +47,18 @@
         height: 16px;
         background-size: 16px 16px;
         background-repeat: no-repeat;
-        &.decrease_2{
-          @include bg-image('decrease_2',"png");
-        }
-        &.discount_2{
-          @include bg-image('discount_2',"png");
-        }
-        &.guarantee_2{
-          @include bg-image('guarantee_2',"png");
-        }
-        &.invoice_2{
-          @include bg-image('invoice_2',"png");
-        }
-        &.special_2{
-          @include bg-image('special_2',"png");          
-        }
-        &.decrease_4{
-          @include bg-image('decrease_4',"png");
-        }
-        &.discount_4{
-          @include bg-image('discount_4',"png");
-        }
-        &.guarantee_4{
-          @include bg-image('guarantee_4',"png");
-        }
-        &.invoice_4{
-          @include bg-image('invoice_4',"png");
-        }
-        &.special_4{
-          @include bg-image('special_4',"png");          
-        }        
+        @for $i from 1 through length($supports-list){
+          &.#{nth($supports-list, $i)}_2{
+            @include bg-image('#{nth($supports-list, $i)}_2',"png");
+          }
+          &.#{nth($supports-list, $i)}_4{
+            @include bg-image('#{nth($supports-list, $i)}_4',"png");
+          }         
+        }       
       }
       .information{
         font-size: 12px;
-        vertical-align: center;
+        vertical-align: middle;
       }       
     }
   }
