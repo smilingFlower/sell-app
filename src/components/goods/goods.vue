@@ -2,7 +2,7 @@
 	<div class="goods">
     <div class="menu-wrapper" ref="menuWrapper">
      <ul>
-       <li v-for="(item, index) in goods" class="menu-item border-1px" :class="{'current':currentIndex === index}" @click="selectMenu(index,$event)">
+       <li v-for="(item, index) in goods" ref="menuItem" class="menu-item border-1px" :class="{'current':currentIndex === index}" @click="selectMenu(index,$event)">
          <span v-show="item.type > -1" class="icon" :class="classMap[item.type]"></span><span class="name">{{item.name}}</span>
        </li>
      </ul>
@@ -61,7 +61,9 @@
         goods: [],
         classMap: [],
         listHeight: [],
+        listMenuHeight: [],
         scrollY: 0,
+        scrollMenuY: 0,
         selectedFood: {}
       };
     },
@@ -104,6 +106,7 @@
             _this.$nextTick(() => {
               _this._initScroll();
               _this._calculateHeight();
+              _this._calculateMenuHeight();
             });
           }
         })
@@ -124,8 +127,16 @@
           click: true
         });
 
+        this.menuScroll.on('scroll', (pos) => {
+          _this.scrollMenuY = Math.abs(Math.round(pos.y));
+        });
+
         this.foodsScroll.on('scroll', (pos) => {
           _this.scrollY = Math.abs(Math.round(pos.y));
+          let menuWrapperHeight = this.$refs.menuWrapper.clientHeight;
+          if (menuWrapperHeight <= _this.scrollY) {
+            this.scrollMeun(this.currentIndex);
+          }
         });
       },
       _calculateHeight() {
@@ -137,6 +148,15 @@
           this.listHeight.push(height);
         }
       },
+      _calculateMenuHeight() {
+        let menuItem = this.$refs.menuItem;
+        let height = 0;
+        this.listMenuHeight.push(height);
+        for (let i = 0, len = menuItem.length; i < len; i++) {
+          height += menuItem[i].clientHeight;
+          this.listMenuHeight.push(height);
+        }
+      },
       selectMenu(index, event) {
         // 在pc端点击触发两次  因为pc端better-scroll没有阻原生默认的事件 原生默认的事伯中没有_constructed这个属性
         if (!event._constructed) {
@@ -146,6 +166,11 @@
         let foodList = this.$refs.foodList;
         let el = foodList[index];
         this.foodsScroll.scrollToElement(el, 300);
+      },
+      scrollMeun(index) {
+        let menuItem = this.$refs.menuItem;
+        let el = menuItem[index];
+        this.menuScroll.scrollToElement(el, 300);
       },
       selectFood(food, event) {
         if (!event._constructed) {

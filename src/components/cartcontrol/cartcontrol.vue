@@ -53,7 +53,6 @@
     .cart-decrease{
       display: inline-block;
       font-size: 0;
-      transform: translate3d(0, 0, 0);
       .inner{
         display: inline-block;
         line-height: 24px;
@@ -63,12 +62,13 @@
         transform: rotate(0);      
       }
       &.move-enter-active, &.move-leave-active{
+        transform: translate3d(0, 0, 0);
         transition: all 0.5s linear;
         opacity: 1;
       }
       &.move-enter, &.move-leave-active{
         opacity: 0;
-        transform: translate3d(24px, 0, 0);
+        transform: translate3d(20px, 0, 0);
         .inner{
           transform: rotate(180deg);
         }
@@ -77,12 +77,11 @@
     .cart-count{
       display: inline-block;
       font-size: 10px;
+      min-width: 16px;
       line-height: 24px;
       text-align: center;
       color: rgb(147,153,159);
       vertical-align: top;
-      padding-right: 2px;
-      padding-left: 2px;
     }
     .cart-add{
       display: inline-block;
